@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "scheduler.apps.SchedulerConfig",
     "rest_framework",
     "social_django",
+    "frontend",
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
+    },
+    "pg": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "csm_web",
+        "USER": "csm_web",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "",
+    },
 }
 
 
@@ -106,7 +115,7 @@ AUTH_USER_MODEL = "scheduler.User"
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Los_Angeles"
 
 USE_I18N = True
 
@@ -135,6 +144,20 @@ LOGIN_REDIRECT_URL = "/scheduler"
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = (
     "***REMOVED***"
 )
+
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.auth_allowed",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.user.get_username",
+    "social_core.pipeline.social_auth.associate_by_email",  # enables ghost profiles
+    "social_core.pipeline.user.create_user",
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.pipeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+)
+
 # TODO Roll this for production
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "***REMOVED***"
 SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
@@ -142,3 +165,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
 ]
+
+# REST Framework
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    )
+}

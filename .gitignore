@@ -1,3 +1,7 @@
+.DS_Store
+# js bundle
+csm_web/frontend/static/frontend/main.js
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -210,3 +214,6 @@ typings/
 
 # Vim swp files
 .*.sw?
+
+# Webpack bundle
+main.js
