@@ -99,16 +99,18 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    },
-    "pg": {
+    }
+}
+
+if not DEBUG:
+    DATABASES["pg"] = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "csm_web",
         "USER": "csm_web",
         "PASSWORD": "",
         "HOST": "localhost",
         "PORT": "",
-    },
-}
+    }
 
 
 # Password validation
@@ -191,62 +193,6 @@ if DEBUG:
 # REST Framework
 REST_FRAMEWORK = {"DEFAULT_RENDERER_CLASSES": REST_RENDERERS}
 
-# Logging
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "default": {"format": "{asctime} {module} {levelname} {message}", "style": "{"}
-    },
-    "handlers": {
-        "console-django": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        },
-        "console-models": {
-            "level": "ERROR",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        },
-        "mail_admins": {
-            "level": "ERROR",
-            "class": "django.utils.log.AdminEmailHandler",
-            "formatter": "default",
-        },
-        "info": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        },
-        "low-level": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        },
-        "models": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "default",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console-django", "info", "mail_admins"],
-            "level": "INFO",
-        },
-        "django.request": {
-            "handlers": ["low-level"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
-        "scheduler.signals": {
-            "handlers": ["console-models", "mail_admins", "models"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
-    },
-}
 
 if DJANGO_ENV == PRODUCTION:
     # Security/HTTPS headers
