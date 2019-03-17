@@ -197,3 +197,10 @@ class Override(models.Model):
 
     def __str__(self):
         return f"Override for week of {self.section} {self.spacetime}"
+
+
+class Flag(models.Model):
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{'On' if self.status == 1 else 'Off'}"
