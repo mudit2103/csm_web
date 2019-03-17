@@ -1,7 +1,16 @@
 from datetime import timedelta
 from django.utils import timezone
 from rest_framework import serializers
-from .models import User, Attendance, Course, Profile, Section, Spacetime, Override
+from .models import (
+    User,
+    Attendance,
+    Course,
+    Flag,
+    Profile,
+    Section,
+    Spacetime,
+    Override,
+)
 from .permissions import is_leader
 from itertools import groupby
 from datetime import datetime
@@ -54,6 +63,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "first_name", "last_name", "email")
+
+
+class FlagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flag
+        fields = ("id", "status")
+
+    def create(self, validated_data):
+        return Flag.objects.create(**validated_data)
 
 
 class AttendanceSerializer(serializers.ModelSerializer):

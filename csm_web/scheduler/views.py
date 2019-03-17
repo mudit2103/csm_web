@@ -9,11 +9,21 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 
-from .models import User, Attendance, Course, Profile, Section, Spacetime, Override
+from .models import (
+    User,
+    Attendance,
+    Course,
+    Flag,
+    Profile,
+    Section,
+    Spacetime,
+    Override,
+)
 from .serializers import (
     UserSerializer,
     AttendanceSerializer,
     CourseSerializer,
+    FlagSerializer,
     ProfileSerializer,
     VerboseProfileSerializer,
     UserProfileSerializer,
@@ -32,6 +42,14 @@ from .permissions import (
 
 VERBOSE = "verbose"
 USERINFO = "userinfo"
+
+
+@api_view(http_method_names=["POST"])
+def toggle(request, pk):
+    flag = get_object_or_404(Flag, pk=pk)
+    flag.status = not flag.status
+    flag.save()
+    return Response(FlagSerializer(flag).data)
 
 
 @api_view(http_method_names=["POST"])
@@ -256,6 +274,11 @@ class CreateAttendanceDetail(generics.CreateAPIView):
             serializer.save()
 
 
+class CreateFlag(generics.CreateAPIView):
+    queryset = Flag.objects.all()
+    serializer_class = FlagSerializer
+
+
 class AttendanceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
@@ -266,8 +289,6 @@ class AttendanceDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 # API Stubs
-
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
